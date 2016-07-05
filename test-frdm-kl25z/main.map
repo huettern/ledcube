@@ -1,0 +1,239 @@
+Archive member included to satisfy reference by file (symbol)
+
+/usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+                              /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o (exit)
+/usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+                              /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o) (_global_impure_ptr)
+/usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+                              /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o (__libc_init_array)
+/usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+                              /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o (memset)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+ .text          0x00000000       0x98 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .data          0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .bss           0x00000000       0x1c /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .init_array    0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .fini_array    0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .eh_frame      0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .jcr           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+ .text          0x00000000      0x114 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .ARM.extab     0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .ARM.exidx     0x00000000        0x8 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .ARM.attributes
+                0x00000000       0x14 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+ .data          0x00000000        0x0 main.o
+ .bss           0x00000000        0x0 main.o
+ .data          0x00000000        0x0 startup.o
+ .bss           0x00000000        0x0 startup.o
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .text.exit     0x00000000       0x40 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .debug_frame   0x00000000       0x28 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-exit.o)
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .data.impure_data
+                0x00000000       0x60 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .rodata.str1.1
+                0x00000000        0x2 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .rodata._global_impure_ptr
+                0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-impure.o)
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .text.__libc_init_array
+                0x00000000       0x88 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00000000       0x34 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-init.o)
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .text.memset   0x00000000       0x18 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x00000000       0x20 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a(lib_a-memset.o)
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .eh_frame      0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .jcr           0x00000000        0x4 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .ARM.attributes
+                0x00000000       0x30 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+ .text          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+ .data          0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+ .bss           0x00000000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+ .init          0x00000000        0xc /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+ .fini          0x00000000        0xc /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+ .ARM.attributes
+                0x00000000       0x18 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+INTERRUPTS       0x00000000         0x000000c0         xr
+TEXT             0x00000410         0x0001fbf0         xr
+RAM              0x1ffff000         0x00004000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/crt0.o
+
+.interrupts     0x00000000       0xc0
+ *(.isr_vector .isr_vector.*)
+ .isr_vector    0x00000000       0xc0 startup.o
+                0x00000000                g_pfnVectors
+
+.text           0x00000410      0x19c
+ *(.text .text.* .gnu.linkonce.t.*)
+ .text          0x00000410      0x134 main.o
+                0x00000410                delay
+                0x00000438                toggle_red
+                0x00000450                toggle_green
+                0x00000468                toggle_blue
+                0x0000047c                main
+ .text          0x00000544       0x68 startup.o
+                0x00000544                RTCSIntHandler
+                0x00000544                FTM1IntHandler
+                0x00000544                USBOTGIntHandler
+                0x00000544                UART0SEIntHandler
+                0x00000544                UART2SEIntHandler
+                0x00000544                FTM2IntHandler
+                0x00000544                I2C1IntHandler
+                0x00000544                PORTDIntHandler
+                0x00000544                Default_ResetHandler
+                0x00000544                DMA1IntHandler
+                0x00000544                DACIntHandler
+                0x00000544                ACMPIntHandler
+                0x00000544                ResetHandler
+                0x00000544                LVDIntHandler
+                0x00000544                PORTAIntHandler
+                0x00000544                SPI1IntHandler
+                0x00000544                FTFAIntHandler
+                0x00000544                UART1SEIntHandler
+                0x00000544                ADCIntHandler
+                0x00000544                DMA0IntHandler
+                0x00000544                I2C0IntHandler
+                0x00000544                FTM0IntHandler
+                0x00000544                LLWUIntHandler
+                0x00000544                MCGIntHandler
+                0x00000544                RTCAIntHandler
+                0x00000544                SPI0IntHandler
+                0x00000544                TSIIntHandler
+                0x00000544                LPTMRIntHandler
+                0x00000544                PITIntHandler
+                0x00000544                DMA3IntHandler
+                0x00000544                DMA2IntHandler
+                0x000005a4                HardFaultIntHandler
+                0x000005a4                PendSVIntHandler
+                0x000005a4                SysTickIntHandler
+                0x000005a4                BusFaultIntHandler
+                0x000005a4                NMIIntHandler
+                0x000005a4                UsageFaultIntHandler
+                0x000005a4                MemManageIntHandler
+                0x000005a4                SVCIntHandler
+                0x000005a4                DebugMonIntHandler
+ *(.glue_7t)
+ .glue_7t       0x000005ac        0x0 linker stubs
+ *(.glue_7)
+ .glue_7        0x000005ac        0x0 linker stubs
+ *(.rodata .rodata* .gnu.linkonce.r.*)
+
+.vfp11_veneer   0x000005ac        0x0
+ .vfp11_veneer  0x000005ac        0x0 linker stubs
+
+.v4_bx          0x000005ac        0x0
+ .v4_bx         0x000005ac        0x0 linker stubs
+
+.init           0x000005ac        0xc
+ .init          0x000005ac        0xc /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+                0x000005ac                _init
+
+.fini           0x000005b8        0xc
+ .fini          0x000005b8        0xc /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+                0x000005b8                _fini
+
+.iplt           0x000005c4        0x0
+ .iplt          0x000005c4        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+
+.rel.dyn        0x000005c4        0x0
+ .rel.iplt      0x000005c4        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x000005c4                . = ALIGN (0x4)
+                0x000005c4                _etext = .
+                0x000005c4                _sidata = .
+
+.data           0x1ffff000        0x0 load address 0x000005c4
+                0x1ffff000                _sdata = .
+ *(.data .data.*)
+                0x1ffff000                . = ALIGN (0x4)
+                0x1ffff000                _edata = .
+
+.igot.plt       0x1ffff000        0x0
+ .igot.plt      0x1ffff000        0x0 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtbegin.o
+
+.bss            0x1ffff000        0x0
+                0x1ffff000                _sbss = .
+ *(.bss .bss.*)
+ *(COMMON)
+                0x1ffff000                . = ALIGN (0x4)
+                0x1ffff000                _ebss = .
+
+.co_stack       0x1ffff000      0x400
+                0x1ffff000                . = ALIGN (0x8)
+ *(.co_stack .co_stack.*)
+ .co_stack      0x1ffff000      0x400 startup.o
+                0x1ffff000                pulStack
+                0x1ffff400                . = ALIGN (0x4)
+                0x1ffff400                _end = .
+LOAD main.o
+LOAD startup.o
+START GROUP
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/libgcc.a
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a
+END GROUP
+START GROUP
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/libgcc.a
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/libc_nano.a
+END GROUP
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtend.o
+LOAD /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crtn.o
+OUTPUT(main.elf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x2d
+ .ARM.attributes
+                0x00000000       0x16 /usr/local/gcc-arm-none-eabi-5_4-2016q2/bin/../lib/gcc/arm-none-eabi/5.4.1/crti.o
+ .ARM.attributes
+                0x00000016       0x32 main.o
+ .ARM.attributes
+                0x00000048       0x32 startup.o
+
+.comment        0x00000000       0x6e
+ .comment       0x00000000       0x6e main.o
+                                 0x6f (size before relaxing)
+ .comment       0x0000006e       0x6f startup.o

@@ -1,0 +1,6 @@
+Warn : deprecated option: -p/--pipe. Use '-c "gdb_port pipe; log_output openocd.log"' instead.
+Info : only one transport option; autoselect 'swd'
+kinetis.cfg:11: Error: invalid subcommand "newdap kinetis cpu -irlen 4"
+in procedure 'script' 
+at file "embedded:startup.tcl", line 60
+in procedure 'cmsis-dap' called at file "kinetis.cfg", line 11
