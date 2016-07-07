@@ -56,7 +56,7 @@ void cube_test () {
 	Z_CLR = Z0;
 	Z_CLR = Z1;
 
-	spi_send(0x01);
+	spi_send(0x02);
 	GPIOD_PSOR = LE;
 	GPIOD_PSOR = OE;
 	for(;;) {

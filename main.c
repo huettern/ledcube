@@ -16,6 +16,8 @@ int main(void)
     char i;
     char *heap_end;
     
+    // FTFA_FOPT |= (1<<2);
+
     // Initialize all modules
     uart_init(115200);
     setvbuf(stdin, NULL, _IONBF, 0);        // No buffering
@@ -44,14 +46,118 @@ int main(void)
 
 
     // init led cube
-    cube_init();
+    //cube_init();
 
     // test cube
-    cube_test();
+    //cube_test();
 
     for(;;) {
         iprintf("ledcube> ");
         getchar();
         iprintf("\r\n");
     }
+}
+
+void NMI_Handler() {
+    iprintf("NMI_Handler\r\n");
+}
+// void HardFault_Handler() {
+//     iprintf("HardFault_Handler\r\n");
+// }
+// void SVC_Handler() {
+//     iprintf("SVC_Handler\r\n");
+// }
+void PendSV_Handler() {
+    iprintf("PendSV_Handler\r\n");
+}
+void SysTick_Handler() {
+    iprintf("SysTick_Handler\r\n");
+}
+
+void DMA0_IRQHandler() {
+    iprintf(" DMA0_IRQHandler\r\n");
+}
+void DMA1_IRQHandler() {
+    iprintf(" DMA1_IRQHandler\r\n");
+}
+void DMA2_IRQHandler() {
+    iprintf(" DMA2_IRQHandler\r\n");
+}
+void DMA3_IRQHandler() {
+    iprintf(" DMA3_IRQHandler\r\n");
+}
+void MCM_IRQHandler() {
+    iprintf(" MCM_IRQHandler\r\n");
+}
+void FTFL_IRQHandler() {
+    iprintf(" FTFL_IRQHandler\r\n");
+}
+void PMC_IRQHandler() {
+    iprintf(" PMC_IRQHandler\r\n");
+}
+void LLW_IRQHandler() {
+    iprintf(" LLW_IRQHandler\r\n");
+}
+void I2C0_IRQHandler() {
+    iprintf(" I2C0_IRQHandler\r\n");
+}
+void I2C1_IRQHandler() {
+    iprintf(" I2C1_IRQHandler\r\n");
+}
+void SPI0_IRQHandler() {
+    iprintf(" SPI0_IRQHandler\r\n");
+}
+void SPI1_IRQHandler() {
+    iprintf(" SPI1_IRQHandler\r\n");
+}
+void UART1_IRQHandler() {
+    iprintf(" UART1_IRQHandler\r\n");
+}
+void UART2_IRQHandler() {
+    iprintf(" UART2_IRQHandler\r\n");
+}
+void ADC0_IRQHandler() {
+    iprintf(" ADC0_IRQHandler\r\n");
+}
+void CMP0_IRQHandler() {
+    iprintf(" CMP0_IRQHandler\r\n");
+}
+void FTM0_IRQHandler() {
+    iprintf(" FTM0_IRQHandler\r\n");
+}
+void FTM1_IRQHandler() {
+    iprintf(" FTM1_IRQHandler\r\n");
+}
+void FTM2_IRQHandler() {
+    iprintf(" FTM2_IRQHandler\r\n");
+}
+void RTC_Alarm_IRQHandler() {
+    iprintf(" RTC_Alarm_IRQHandler\r\n");
+}
+void RTC_Seconds_IRQHandler() {
+    iprintf(" RTC_Seconds_IRQHandler\r\n");
+}
+void PIT_IRQHandler() {
+    iprintf(" PIT_IRQHandler\r\n");
+}
+void USBOTG_IRQHandler() {
+    iprintf(" USBOTG_IRQHandler\r\n");
+}
+void DAC0_IRQHandler() {
+    iprintf(" DAC0_IRQHandler\r\n");
+}
+void TSI0_IRQHandler() {
+    iprintf(" TSI0_IRQHandler\r\n");
+}
+void MCG_IRQHandler() {
+    iprintf(" MCG_IRQHandler\r\n");
+}
+void LPTimer_IRQHandler() {
+    iprintf(" LPTimer_IRQHandler\r\n");
+}
+void PORTA_IRQHandler() {
+    iprintf(" PORTA_IRQHandler\r\n");
+}
+void PORTD_IRQHandle() {
+    iprintf(" PORTD_IRQHandle\r\n");
 }
