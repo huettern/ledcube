@@ -68,24 +68,36 @@ int main(void)
     // test cube
     //cube_test();
 
-
+    tsFrame frame;
+    frame.layer[0].color[0][0].all = 0xffffff;
     // test
+    // tuColor cl;
+    // cl.rgb.r = 255;
+    // cl.rgb.g = 0x0f;
+    // cl.rgb.b = 1;
+
+    // iprintf("Color r: %d\r\n", cl.rgb.r);
+    // iprintf("Color g: %d\r\n", cl.rgb.g);
+    // iprintf("Color b: %d\r\n", cl.rgb.b);
+    // iprintf("Color all: %d\r\n", cl.all);
+
+
     ctr32 =1;
     ctr8 = 1;
     cube_set_z(0x01);
     cube_output_enable(0xff);
-    while(1) {
-        cube_write_driver(ctr32);
-        print_bin(ctr32);
-        ctr32 <<= 1;
-        if(ctr32 == 0) {
-            ctr32 = 1;
-            ctr8 <<= 1;
-            if(ctr8 == 0x08) ctr8= 1;
-            cube_set_z(ctr8);
-        }
-        delay(500);
-    }
+    // while(1) {
+    //     cube_write_driver(ctr32);
+    //     print_bin(ctr32);
+    //     ctr32 <<= 1;
+    //     if(ctr32 == 0) {
+    //         ctr32 = 1;
+    //         ctr8 <<= 1;
+    //         if(ctr8 == 0x08) ctr8= 1;
+    //         cube_set_z(ctr8);
+    //     }
+    //     delay(500);
+    // }
     // 
 
     iprintf("ledcube> ");
@@ -100,8 +112,7 @@ int main(void)
             linebuf[linebufptr++] = i;
             putchar(i);
         }
-
-
+        cube_dbg();
     }
 }
 
@@ -260,9 +271,6 @@ void CMP0_IRQHandler() {
 }
 void FTM0_IRQHandler() {
     iprintf(" FTM0_IRQHandler\r\n");
-}
-void FTM1_IRQHandler() {
-    iprintf(" FTM1_IRQHandler\r\n");
 }
 void FTM2_IRQHandler() {
     iprintf(" FTM2_IRQHandler\r\n");

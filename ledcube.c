@@ -32,10 +32,15 @@
 #define OE (1 << 3)
 
 //==============================================================
+// static Data
+//==============================================================
+static volatile uint32_t tickctr = 0;
+
+//==============================================================
 // prototypes
 //==============================================================
 void init_io();
-
+void init_clk();
 
 //==============================================================
 // functions
@@ -48,9 +53,9 @@ void cube_init () {
 
 	// SPI
 	spi_init();
-
+	cube_write_driver(0x00000000);
     RGB_LED(0,100,0);
-
+    init_clk();
 }
 
 void cube_test () {
@@ -121,6 +126,34 @@ void init_io() {
 	GPIOD_PDDR |= LE;
 	GPIOD_PDDR |= OE;
 
+}
+
+void init_clk() {
+
+    SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK;
+    SIM_SOPT2 |= SIM_SOPT2_TPMSRC(1);
+
+    TPM1_MOD  = 0xffff;
+    // TPM1_C1SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK;
+
+    TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7);     /* Edge Aligned PWM running from BUSCLK / 1 */
+
+	TPM1_SC |= TPM_SC_TOIE_MASK; //enable overflow interrupt
+	enable_irq(INT_TPM1);
+}
+
+
+void FTM1_IRQHandler() {
+	static uint32_t pat = 1;
+	TPM1_SC |= TPM_SC_TOF_MASK;
+	cube_write_driver(pat);
+	if(pat = 0x80000000) pat = 1; else pat <<= 1;
+	tickctr++;
+    iprintf("p=%d\r\n",pat);
+}
+
+void cube_dbg() {
+	iprintf("ctr=%d\r\n", tickctr);
 }
 
 void cube_spi_write(uint8_t d) {
