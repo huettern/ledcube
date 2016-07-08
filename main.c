@@ -3,6 +3,12 @@
 //
 
 #include <stdio.h>
+#include <string.h>
+
+#include <stdlib.h>
+#include <assert.h>
+
+
 #include "freedom.h"
 #include "common.h"
 
@@ -10,11 +16,22 @@
 
 extern char *_sbrk(int len);
 
+char linebuf[100];
+uint8_t linebufptr = 0;
+
+
+char** str_split(char* a_str, const char a_delim);
+void parseLine();
+
+void print_bin(uint32_t n);
+
 // Main program
 int main(void)
 {
     char i;
     char *heap_end;
+    uint32_t ctr32;
+    uint8_t ctr8;
     
     // FTFA_FOPT |= (1<<2);
 
@@ -46,16 +63,135 @@ int main(void)
 
 
     // init led cube
-    //cube_init();
+    cube_init();
 
     // test cube
     //cube_test();
 
-    for(;;) {
-        iprintf("ledcube> ");
-        getchar();
-        iprintf("\r\n");
+
+    // test
+    ctr32 =1;
+    ctr8 = 1;
+    cube_set_z(0x01);
+    cube_output_enable(0xff);
+    while(1) {
+        cube_write_driver(ctr32);
+        print_bin(ctr32);
+        ctr32 <<= 1;
+        if(ctr32 == 0) {
+            ctr32 = 1;
+            ctr8 <<= 1;
+            if(ctr8 == 0x08) ctr8= 1;
+            cube_set_z(ctr8);
+        }
+        delay(500);
     }
+    // 
+
+    iprintf("ledcube> ");
+    for(;;) {
+
+        i = getchar();
+        if(i == 13) {
+            iprintf("\r\n");
+            parseLine();
+            iprintf("ledcube> ");
+        } else {
+            linebuf[linebufptr++] = i;
+            putchar(i);
+        }
+
+
+    }
+}
+
+
+void parseLine() {
+    uint8_t i = 0;
+    uint8_t num;
+    // char* cmd = strchr(linebuf, ' ');
+    // char* data = strncpy(data, linebuf + cmd+1, 20);
+    // int idx = cmd - linebuf[0];
+    if(linebufptr == 0) {   
+        return;
+    }
+    char** splt = str_split(linebuf,' ');
+    if(strcmp(splt[0], "spi") == 0) {
+        num = atoi(splt[1]);
+        iprintf("spi: %d\r\n\r\n", num);
+        cube_spi_write(num);
+    }
+
+    if(strcmp(splt[0], "z") == 0) {
+        num = atoi(splt[1]);
+        iprintf("z: %d\r\n\r\n", num);
+        cube_set_z(1<<num);
+    }
+
+    linebufptr = 0;
+    for(; i < 100; i++)
+        linebuf[i] = 0;
+}
+
+
+char** str_split(char* a_str, const char a_delim)
+{
+    char** result    = 0;
+    size_t count     = 0;
+    char* tmp        = a_str;
+    char* last_comma = 0;
+    char delim[2];
+    delim[0] = a_delim;
+    delim[1] = 0;
+
+    /* Count how many elements will be extracted. */
+    while (*tmp)
+    {
+        if (a_delim == *tmp)
+        {
+            count++;
+            last_comma = tmp;
+        }
+        tmp++;
+    }
+
+    /* Add space for trailing token. */
+    count += last_comma < (a_str + strlen(a_str) - 1);
+
+    /* Add space for terminating null string so caller
+       knows where the list of returned strings ends. */
+    count++;
+
+    result = malloc(sizeof(char*) * count);
+
+    if (result)
+    {
+        size_t idx  = 0;
+        char* token = strtok(a_str, delim);
+
+        while (token)
+        {
+            //assert(idx < count);
+            *(result + idx++) = strdup(token);
+            token = strtok(0, delim);
+        }
+        //assert(idx == count - 1);
+        *(result + idx) = 0;
+    }
+
+    return result;
+}
+
+void print_bin(uint32_t n) {
+    uint8_t ctr = 0;
+    for(;ctr < 32; ctr++) {
+        if(n & (1<<(31-ctr))) {
+            iprintf("1");
+        } else {
+            iprintf("0");
+        }
+    }
+    iprintf("\r\n");
 }
 
 void NMI_Handler() {
