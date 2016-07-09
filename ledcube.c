@@ -7,6 +7,8 @@
 #include "ledcube.h"
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "freedom.h"
 #include "common.h"
 #include "spi.h"
@@ -23,6 +25,7 @@
 #define DRV_SET GPIOD_PSOR
 #define DRV_CLR GPIOD_PCOR
 #define DRV_TOG GPIOD_PTOR
+#define DRV_READ GPIOD_PDOR
 
 #define Z0 (1 << 12)
 #define Z1 (1 << 4)
@@ -31,10 +34,27 @@
 #define LE (1 << 0)
 #define OE (1 << 3)
 
+
 //==============================================================
 // static Data
 //==============================================================
 static volatile uint32_t tickctr = 0;
+
+static volatile uint16_t pwm_ctr = 0;
+static const uint16_t pwm_ctr_mod = 255;
+static volatile uint8_t z_ctr = 0;
+static const uint8_t z_ctr_mod = 3;
+static volatile uint32_t frame_ctr = 0;
+static const uint32_t frame_ctr_mod = 1; // number of frames
+
+static volatile uint32_t driv_buf = 0; // spi driver buffer holding data for next write
+static uint32_t z_buf;
+
+static volatile uint8_t int_flag = 1; // set to calculate new frame
+
+static volatile uint8_t change_z = 0;
+
+static tsFrame test_frame;
 
 //==============================================================
 // prototypes
@@ -53,9 +73,25 @@ void cube_init () {
 
 	// SPI
 	spi_init();
+	cube_latch_on();
 	cube_write_driver(0x00000000);
+	cube_latch_off();
     RGB_LED(0,100,0);
     init_clk();
+
+    memset(&test_frame, 0, sizeof(test_frame));
+    // init test frame
+    test_frame.layer[0].color[0].rgb.r = 0xff;
+    test_frame.layer[0].color[0].rgb.g = 0;
+    test_frame.layer[0].color[0].rgb.b = 0;
+
+    test_frame.layer[1].color[0].rgb.r = 0;
+    test_frame.layer[1].color[0].rgb.g = 0xff;
+    test_frame.layer[1].color[0].rgb.b = 0;
+
+    test_frame.layer[2].color[0].rgb.r = 0;
+    test_frame.layer[2].color[0].rgb.g = 0;
+    test_frame.layer[2].color[0].rgb.b = 0xff;
 }
 
 void cube_test () {
@@ -133,23 +169,137 @@ void init_clk() {
     SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK;
     SIM_SOPT2 |= SIM_SOPT2_TPMSRC(1);
 
-    TPM1_MOD  = 0xffff;
-    // TPM1_C1SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSA_MASK;
+ //    TPM1_MOD  = 2614; // input: 48MHz -> tick at 18.362kHz
+	// TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(0); // start timer
 
-    TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7);     /* Edge Aligned PWM running from BUSCLK / 1 */
-
+    TPM1_MOD  = 0xffff; // input: 48MHz -> tick at 18.362kHz
+	TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7); // start timer
+	
 	TPM1_SC |= TPM_SC_TOIE_MASK; //enable overflow interrupt
+
 	enable_irq(INT_TPM1);
 }
 
+void cube_run() {
+	uint8_t led_ctr = 0;
+	uint32_t buf = 0;
+	uint8_t led = 0;
+	uint8_t z_ctr_old = 0;
+	tuColor clr;
+	if(int_flag) {
+		// increment counters
+		pwm_ctr++;
+		z_ctr_old = z_ctr;
+		z_ctr+=(uint8_t)(pwm_ctr/pwm_ctr_mod); // inc z ctr after pwm complete
+		frame_ctr+=(uint8_t)(z_ctr/z_ctr_mod); // inc frame ctr after z complete
+
+		// wrap counters
+		pwm_ctr %= pwm_ctr_mod;
+		z_ctr %= z_ctr_mod;
+		frame_ctr %= frame_ctr_mod;
+
+		if(z_ctr_old != z_ctr) change_z = 1;
+
+		// for every led
+		for(led_ctr = 0; led_ctr < 9; led_ctr++) {
+			// get led color
+			clr = test_frame.layer[z_ctr].color[led_ctr];
+			led = 0;
+			// red
+			if(pwm_ctr < clr.rgb.r) led |= (1<<0);
+			// grn
+			if(pwm_ctr < clr.rgb.g) led |= (1<<1);
+			// blu
+			if(pwm_ctr < clr.rgb.b) led |= (1<<2);
+
+			buf |= (led & 0x07) << (led_ctr*3);
+		}
+		driv_buf = buf;
+		z_buf = (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
+		int_flag = 0;
+
+		// cube_latch_on(); // write into latch
+		// cube_write_driver(driv_buf);
+
+		iprintf("z:%d p:%d zbuf:%d change_z:%d GPIOA_PDOR:%d driv_buf:%d\r\n", z_ctr, pwm_ctr, z_buf,change_z,GPIOA_PDOR,driv_buf);
+	}
+}
 
 void FTM1_IRQHandler() {
-	static uint32_t pat = 1;
-	TPM1_SC |= TPM_SC_TOF_MASK;
-	cube_write_driver(pat);
-	if(pat = 0x80000000) pat = 1; else pat <<= 1;
-	tickctr++;
-    iprintf("p=%d\r\n",pat);
+	if(TPM1_SC & TPM_SC_TOIE_MASK) {
+		tickctr++;
+		if(tickctr < 20) return;
+		tickctr = 0;
+		
+		cube_latch_on(); // write into latch
+		cube_write_driver(driv_buf);
+		cube_latch_off(); // write into latch
+		
+		// write spi driver
+		if(change_z) {
+			change_z = 0;
+			cube_output_off();
+			//GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
+			GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | z_buf;
+			cube_latch_off();
+			cube_output_on();
+		}
+		cube_latch_off();
+		cube_output_on();
+
+		// calc new buffer
+		int_flag = 1;
+		TPM1_SC |= TPM_SC_TOF_MASK;
+
+
+
+
+
+
+
+		// // write spi driver
+		// cube_latch_on(); // write into latch
+		// cube_write_driver(driv_buf);
+		// // controll z driver
+		// if(z_ctr_old != z_ctr) {
+		// 	d = 1<<z_ctr;
+		// 	cube_output_off();
+		// 	GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | ((d & 0x01)<<12) | ((d & 0x02)<<3) | ((d & 0x04)<<3);
+		// 	cube_latch_off();
+		// 	cube_output_on();
+		// }
+		// // cube_set_z(1<<z_ctr);
+		// cube_latch_off();
+
+		// // increment counters
+		// pwm_ctr++;
+		// z_ctr_old = z_ctr;
+		// z_ctr+=(uint8_t)(pwm_ctr/pwm_ctr_mod); // inc z ctr after pwm complete
+		// frame_ctr+=(uint8_t)(z_ctr/z_ctr_mod); // inc frame ctr after z complete
+
+		// // wrap counters
+		// pwm_ctr %= pwm_ctr_mod;
+		// z_ctr %= z_ctr_mod;
+		// frame_ctr %= frame_ctr_mod;
+
+		// calc new buffer
+		// int_flag = 1;
+	}
+
+
+	// static uint32_t pat = 1;
+	// if(TPM1_SC & TPM_SC_TOIE_MASK) {
+	// 	TPM1_SC |= TPM_SC_TOF_MASK;
+	// 	TPM1_C0SC |= TPM_CnSC_CHF_MASK;
+	// 	TPM1_STATUS = 0xffffffff; // clear all tpm1 flags
+	// 	cube_write_driver(pat);
+	// 	if(pat == 0x80000000) pat = 1; else pat <<= 1;
+	// 	tickctr++;
+	//     //iprintf("p=%d\r\n",pat);
+	// 	return;
+	// }
+	// if(TPM1_C0SC & TPM_CnSC_CHF_MASK) {
+	// }
 }
 
 void cube_dbg() {
@@ -163,7 +313,7 @@ void cube_spi_write(uint8_t d) {
 }
 
 
-void cube_set_z(uint8_t d) {
+inline void cube_set_z(uint8_t d) {
 	GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | ((d & 0x01)<<12) | ((d & 0x02)<<3) | ((d & 0x04)<<3);
 }
 
@@ -176,12 +326,25 @@ void cube_output_enable(uint8_t d) {
 }
 
 void cube_write_driver(uint32_t d) {
-	DRV_CLR = LE; // write into latch
-
+DRV_CLR = LE; // write into latch
 	spi_send((d & 0xff000000) >> 24);
 	spi_send((d & 0x00ff0000) >> 16);
 	spi_send((d & 0x0000ff00) >> 8);
 	spi_send((d & 0x000000ff) >> 0);
+DRV_SET = LE; // enable latch
+}
 
+inline void cube_latch_on() {
+	DRV_CLR = LE; // write into latch
+}
+
+inline void cube_latch_off() {
 	DRV_SET = LE; // enable latch
+}
+
+inline void cube_output_on() {
+	DRV_CLR = OE;
+}
+inline void cube_output_off() {
+	DRV_SET = OE;
 }

@@ -28,10 +28,10 @@ void print_bin(uint32_t n);
 // Main program
 int main(void)
 {
+    uint8_t ctr8 = 0;
+    uint32_t ctr32 = 0;
     char i;
     char *heap_end;
-    uint32_t ctr32;
-    uint8_t ctr8;
     
     // FTFA_FOPT |= (1<<2);
 
@@ -68,8 +68,6 @@ int main(void)
     // test cube
     //cube_test();
 
-    tsFrame frame;
-    frame.layer[0].color[0][0].all = 0xffffff;
     // test
     // tuColor cl;
     // cl.rgb.r = 255;
@@ -82,23 +80,25 @@ int main(void)
     // iprintf("Color all: %d\r\n", cl.all);
 
 
-    ctr32 =1;
-    ctr8 = 1;
     cube_set_z(0x01);
     cube_output_enable(0xff);
-    // while(1) {
-    //     cube_write_driver(ctr32);
-    //     print_bin(ctr32);
-    //     ctr32 <<= 1;
-    //     if(ctr32 == 0) {
-    //         ctr32 = 1;
-    //         ctr8 <<= 1;
-    //         if(ctr8 == 0x08) ctr8= 1;
-    //         cube_set_z(ctr8);
-    //     }
-    //     delay(500);
-    // }
-    // 
+    while(1) {
+        cube_write_driver(ctr32);
+        print_bin(ctr32);
+        ctr32 <<= 1;
+        if(ctr32 == 0) {
+            ctr32 = 1;
+            ctr8 <<= 1;
+            if(ctr8 == 0x08) ctr8= 1;
+            cube_set_z(ctr8);
+        }
+        delay(500);
+    }
+    
+    iprintf("cube_run ");
+    while(1) {
+        cube_run();
+    }
 
     iprintf("ledcube> ");
     for(;;) {
