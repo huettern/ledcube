@@ -56,11 +56,15 @@ static volatile uint8_t change_z = 0;
 
 static tsFrame test_frame;
 
+static uint32_t spi_ring_buf[256*2];
+static volatile uint8_t update_spi_buf = 1; // update spi buf: 0: no, 1: first half, 2: second half
+
 //==============================================================
 // prototypes
 //==============================================================
 void init_io();
 void init_clk();
+void init_dma();
 
 //==============================================================
 // functions
@@ -80,6 +84,8 @@ void cube_init () {
 	cube_latch_off();
     RGB_LED(0,100,0);
     init_clk();
+	init_dma();
+
 
     memset(&test_frame, 0, sizeof(test_frame));
     // init test frame
@@ -107,6 +113,9 @@ void cube_init () {
     // test_frame.layer[0].color[3].rgb.r = 0;
     // test_frame.layer[0].color[3].rgb.g = 0;
     // test_frame.layer[0].color[3].rgb.b = 0xff;
+
+	TPM1_SC |= TPM_SC_TOIE_MASK; //enable overflow interrupt
+	enable_irq(INT_TPM1);
 }
 
 void cube_test () {
@@ -193,9 +202,11 @@ void init_clk() {
  //    TPM1_MOD  = 0xffff; // input: 48MHz -> tick at 18.362kHz
 	// TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7); // start timer
 	
-	TPM1_SC |= TPM_SC_TOIE_MASK; //enable overflow interrupt
+}
 
-	enable_irq(INT_TPM1);
+void init_dma()
+{
+	// connect 
 }
 
 void cube_run() {
@@ -203,44 +214,82 @@ void cube_run() {
 	uint32_t buf = 0;
 	uint8_t led = 0;
 	uint8_t z_ctr_old = 0;
+	uint16_t i;
+	uint32_t spi_buf_off;
 	tsColor* clr;
-	if(int_flag) {
-		// increment counters
-		pwm_ctr++;
-		z_ctr_old = z_ctr;
-		z_ctr+=(uint8_t)(pwm_ctr/pwm_ctr_mod); // inc z ctr after pwm complete
-		frame_ctr+=(uint8_t)(z_ctr/z_ctr_mod); // inc frame ctr after z complete
 
+	if(update_spi_buf) 
+	{
+		if(update_spi_buf == 1) spi_buf_off = 0;
+		if(update_spi_buf == 2) spi_buf_off = 256;
+		// update first half of ring buffer
+		// increment counters
+		z_ctr++; // inc z ctr after pwm complete
+		frame_ctr+=(uint8_t)(z_ctr/z_ctr_mod); // inc frame ctr after z complete
 		// wrap counters
-		pwm_ctr %= pwm_ctr_mod;
 		z_ctr %= z_ctr_mod;
 		frame_ctr %= frame_ctr_mod;
 
-		if(z_ctr_old != z_ctr) change_z = 1;
+		// for every pwm step
+		for(i = 0; i < 256; i++)
+		{
+			buf = 0;
+			// for every led
+			for(led_ctr = 0; led_ctr < 9; led_ctr++) {
+				// get led color
+				clr = &test_frame.layer[z_ctr].color[led_ctr];
+				led = 0;
+				// red
+				if(i < clr->r) led |= (1<<0);
+				// grn
+				if(i < clr->g) led |= (1<<1);
+				// blu
+				if(i < clr->b) led |= (1<<2);
 
-		// for every led
-		for(led_ctr = 0; led_ctr < 9; led_ctr++) {
-			// get led color
-			clr = &test_frame.layer[z_ctr].color[led_ctr];
-			led = 0;
-			// red
-			if(pwm_ctr < clr->r) led |= (1<<0);
-			// grn
-			if(pwm_ctr < clr->g) led |= (1<<1);
-			// blu
-			if(pwm_ctr < clr->b) led |= (1<<2);
-
-			buf |= (led & 0x07) << (led_ctr*3);
+				buf |= (led & 0x07) << (led_ctr*3);
+			}
+			spi_ring_buf[spi_buf_off+i] = buf;
 		}
-		driv_buf = buf;
 		z_buf = (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
-		int_flag = 0;
-
-		cube_latch_on(); // write into latch
-		cube_write_driver(driv_buf);
-
-		//iprintf("z:%d p:%d zbuf:%d change_z:%d GPIOA_PDOR:%d driv_buf:%d\r\n", z_ctr, pwm_ctr, z_buf,change_z,GPIOA_PDOR,driv_buf);
 	}
+
+	// if(int_flag) {
+	// 	// increment counters
+	// 	pwm_ctr++;
+	// 	z_ctr_old = z_ctr;
+	// 	z_ctr+=(uint8_t)(pwm_ctr/pwm_ctr_mod); // inc z ctr after pwm complete
+	// 	frame_ctr+=(uint8_t)(z_ctr/z_ctr_mod); // inc frame ctr after z complete
+
+	// 	// wrap counters
+	// 	pwm_ctr %= pwm_ctr_mod;
+	// 	z_ctr %= z_ctr_mod;
+	// 	frame_ctr %= frame_ctr_mod;
+
+	// 	if(z_ctr_old != z_ctr) change_z = 1;
+
+	// 	// for every led
+	// 	for(led_ctr = 0; led_ctr < 9; led_ctr++) {
+	// 		// get led color
+	// 		clr = &test_frame.layer[z_ctr].color[led_ctr];
+	// 		led = 0;
+	// 		// red
+	// 		if(pwm_ctr < clr->r) led |= (1<<0);
+	// 		// grn
+	// 		if(pwm_ctr < clr->g) led |= (1<<1);
+	// 		// blu
+	// 		if(pwm_ctr < clr->b) led |= (1<<2);
+
+	// 		buf |= (led & 0x07) << (led_ctr*3);
+	// 	}
+	// 	driv_buf = buf;
+	// 	z_buf = (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
+	// 	int_flag = 0;
+
+	// 	cube_latch_on(); // write into latch
+	// 	cube_write_driver(driv_buf);
+
+	// 	//iprintf("z:%d p:%d zbuf:%d change_z:%d GPIOA_PDOR:%d driv_buf:%d\r\n", z_ctr, pwm_ctr, z_buf,change_z,GPIOA_PDOR,driv_buf);
+	// }
 }
 
 void FTM1_IRQHandler() {
