@@ -132,6 +132,7 @@ int main(void)
 
     iprintf("cube_run ");
     cube_output_on();
+    render_rainbow();
     while(1) {
         cube_run();
     }
@@ -323,9 +324,6 @@ void ADC0_IRQHandler() {
 void CMP0_IRQHandler() {
     iprintf(" CMP0_IRQHandler\r\n");
 }
-void FTM0_IRQHandler() {
-    iprintf(" FTM0_IRQHandler\r\n");
-}
 void FTM2_IRQHandler() {
     iprintf(" FTM2_IRQHandler\r\n");
 }
@@ -355,4 +353,6 @@ void PORTA_IRQHandler() {
 }
 void PORTD_IRQHandle() {
     iprintf(" PORTD_IRQHandle\r\n");
+}
+void LPTimer_IRQHandler() {
 }
