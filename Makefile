@@ -57,7 +57,7 @@ DEPLOY_VOLUME = /media/sf_FRDM-KL25Z
 
 deploy: main.srec
 	cp $< /media/sf_noah/Desktop/$<
-	cp $< /media/noah/FRDM-KL25Z/$<
+	#cp $< /media/noah/FRDM-KL25Z/$<
 	#dd conv=fsync bs=64k if=$< of=$(DEPLOY_VOLUME)/$<
 	
 # -----------------------------------------------------------------------------

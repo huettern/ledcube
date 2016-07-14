@@ -17,6 +17,8 @@ inline void cube_latch_off();
 inline void cube_output_on();
 inline void cube_output_off();
 
+void cube_set_single_frame_led(uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b);
+
 void cube_run();
 
 void cube_dbg();
@@ -27,13 +29,13 @@ typedef struct {
 	uint8_t r;
 } tsColor;
 
-typedef union {
-	tsColor rgb;
-	uint32_t all;
-} tuColor;
+// typedef union {
+// 	tsColor rgb;
+// 	uint32_t all;
+// } tuColor;
 
 typedef struct {
-	tuColor color[9];
+	tsColor color[9];
 } tsLayer;
 
 typedef struct {

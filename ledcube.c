@@ -66,10 +66,12 @@ void init_clk();
 // functions
 //==============================================================
 void cube_init () {
+	int i,j,k;
     iprintf("cube_init\r\n");
     RGB_LED(100,0,0);
 
     init_io();
+    cube_set_z(0);
 
 	// SPI
 	spi_init();
@@ -81,17 +83,30 @@ void cube_init () {
 
     memset(&test_frame, 0, sizeof(test_frame));
     // init test frame
-    test_frame.layer[0].color[0].rgb.r = 0xff;
-    test_frame.layer[0].color[0].rgb.g = 0;
-    test_frame.layer[0].color[0].rgb.b = 0;
+    test_frame.layer[0].color[0].r = 0xff;
+    test_frame.layer[0].color[0].g = 0;
+    test_frame.layer[0].color[0].b = 0;
 
-    test_frame.layer[1].color[0].rgb.r = 0;
-    test_frame.layer[1].color[0].rgb.g = 0xff;
-    test_frame.layer[1].color[0].rgb.b = 0;
+    test_frame.layer[1].color[0].r = 0;
+    test_frame.layer[1].color[0].g = 0;
+    test_frame.layer[1].color[0].b = 0;
 
-    test_frame.layer[2].color[0].rgb.r = 0;
-    test_frame.layer[2].color[0].rgb.g = 0;
-    test_frame.layer[2].color[0].rgb.b = 0xff;
+    test_frame.layer[2].color[0].r = 0;
+    test_frame.layer[2].color[0].g = 0;
+    test_frame.layer[2].color[0].b = 0xff;
+
+    // for(i=0;i<3;i++) {
+    // 	for(j=0;j<9;j++) {
+    // 		iprintf("fram0: layer %d:  ", i, j);
+    // 		iprintf("r=%d ", test_frame.layer[i].color[j].r);
+    // 		iprintf("g=%d ", test_frame.layer[i].color[j].g);
+    // 		iprintf("b=%d\r\n", test_frame.layer[i].color[j].b);
+    // 	}
+    // }
+
+    // test_frame.layer[0].color[3].rgb.r = 0;
+    // test_frame.layer[0].color[3].rgb.g = 0;
+    // test_frame.layer[0].color[3].rgb.b = 0xff;
 }
 
 void cube_test () {
@@ -172,8 +187,11 @@ void init_clk() {
  //    TPM1_MOD  = 2614; // input: 48MHz -> tick at 18.362kHz
 	// TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(0); // start timer
 
-    TPM1_MOD  = 0xffff; // input: 48MHz -> tick at 18.362kHz
-	TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7); // start timer
+    TPM1_MOD  = 1600; // input: 48MHz -> tick at 18.362kHz
+	TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(0); // start timer
+
+ //    TPM1_MOD  = 0xffff; // input: 48MHz -> tick at 18.362kHz
+	// TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(7); // start timer
 	
 	TPM1_SC |= TPM_SC_TOIE_MASK; //enable overflow interrupt
 
@@ -185,7 +203,7 @@ void cube_run() {
 	uint32_t buf = 0;
 	uint8_t led = 0;
 	uint8_t z_ctr_old = 0;
-	tuColor clr;
+	tsColor* clr;
 	if(int_flag) {
 		// increment counters
 		pwm_ctr++;
@@ -203,14 +221,14 @@ void cube_run() {
 		// for every led
 		for(led_ctr = 0; led_ctr < 9; led_ctr++) {
 			// get led color
-			clr = test_frame.layer[z_ctr].color[led_ctr];
+			clr = &test_frame.layer[z_ctr].color[led_ctr];
 			led = 0;
 			// red
-			if(pwm_ctr < clr.rgb.r) led |= (1<<0);
+			if(pwm_ctr < clr->r) led |= (1<<0);
 			// grn
-			if(pwm_ctr < clr.rgb.g) led |= (1<<1);
+			if(pwm_ctr < clr->g) led |= (1<<1);
 			// blu
-			if(pwm_ctr < clr.rgb.b) led |= (1<<2);
+			if(pwm_ctr < clr->b) led |= (1<<2);
 
 			buf |= (led & 0x07) << (led_ctr*3);
 		}
@@ -218,34 +236,44 @@ void cube_run() {
 		z_buf = (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
 		int_flag = 0;
 
-		// cube_latch_on(); // write into latch
-		// cube_write_driver(driv_buf);
+		cube_latch_on(); // write into latch
+		cube_write_driver(driv_buf);
 
-		iprintf("z:%d p:%d zbuf:%d change_z:%d GPIOA_PDOR:%d driv_buf:%d\r\n", z_ctr, pwm_ctr, z_buf,change_z,GPIOA_PDOR,driv_buf);
+		//iprintf("z:%d p:%d zbuf:%d change_z:%d GPIOA_PDOR:%d driv_buf:%d\r\n", z_ctr, pwm_ctr, z_buf,change_z,GPIOA_PDOR,driv_buf);
 	}
 }
 
 void FTM1_IRQHandler() {
+	// TPM1_SC |= TPM_SC_TOF_MASK;
+	// return;
+	if(int_flag) RGB_LED(100,0,0);
 	if(TPM1_SC & TPM_SC_TOIE_MASK) {
-		tickctr++;
-		if(tickctr < 20) return;
-		tickctr = 0;
+		// tickctr++;
+		// if(tickctr < 20) return;
+		// tickctr = 0;
 		
-		cube_latch_on(); // write into latch
-		cube_write_driver(driv_buf);
-		cube_latch_off(); // write into latch
-		
-		// write spi driver
-		if(change_z) {
-			change_z = 0;
-			cube_output_off();
-			//GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
-			GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | z_buf;
-			cube_latch_off();
-			cube_output_on();
-		}
+		// cube_latch_on(); // write into latch
+		// cube_write_driver(driv_buf);
+		// cube_latch_off(); // write into latch
+
+		// cube_output_off();
+		GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | z_buf;
 		cube_latch_off();
-		cube_output_on();
+		// cube_output_on();
+
+		
+		// 	cube_output_off();
+		// // write spi driver
+		// if(change_z) {
+		// 	change_z = 0;
+		// 	//GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | (((1<<z_ctr) & 0x01)<<12) | (((1<<z_ctr) & 0x02)<<3) | (((1<<z_ctr) & 0x04)<<3);
+		// 	cube_output_off();
+		// 	GPIOA_PDOR = (GPIOA_PDOR & ~(Z0 | Z1 | Z2)) | z_buf;
+		// 	cube_latch_off();
+		// 	cube_output_on();
+		// }
+		// cube_latch_off();
+		// cube_output_on();
 
 		// calc new buffer
 		int_flag = 1;
@@ -326,25 +354,33 @@ void cube_output_enable(uint8_t d) {
 }
 
 void cube_write_driver(uint32_t d) {
-DRV_CLR = LE; // write into latch
 	spi_send((d & 0xff000000) >> 24);
 	spi_send((d & 0x00ff0000) >> 16);
 	spi_send((d & 0x0000ff00) >> 8);
 	spi_send((d & 0x000000ff) >> 0);
-DRV_SET = LE; // enable latch
 }
 
 inline void cube_latch_on() {
-	DRV_CLR = LE; // write into latch
-}
-
-inline void cube_latch_off() {
+	// DRV_CLR = LE; // write into latch
 	DRV_SET = LE; // enable latch
 }
 
+inline void cube_latch_off() {
+
+	DRV_CLR = LE; // write into latch
+	// DRV_SET = LE; // enable latch
+}
+
 inline void cube_output_on() {
-	DRV_CLR = OE;
+	DRV_SET = OE;
 }
 inline void cube_output_off() {
-	DRV_SET = OE;
+	DRV_CLR = OE;
+}
+
+
+void cube_set_single_frame_led(uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
+	test_frame.layer[layer].color[led].r=r;
+	test_frame.layer[layer].color[led].g=g;
+	test_frame.layer[layer].color[led].b=b;
 }

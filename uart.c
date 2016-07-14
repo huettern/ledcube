@@ -83,6 +83,12 @@ int uart_read(char *p, int len)
     return len - i;
 }
 
+void uart_getch(char *p)
+{
+    if(buf_isempty(rx_buffer)) *p = 0;
+    else *p = buf_get_byte(rx_buffer);
+}
+
 //
 // uart_init() -- Initialize debug / OpenSDA UART0
 //

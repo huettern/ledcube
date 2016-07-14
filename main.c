@@ -80,39 +80,73 @@ int main(void)
     // iprintf("Color all: %d\r\n", cl.all);
 
 
-    cube_set_z(0x01);
-    cube_output_enable(0xff);
-    while(1) {
-        cube_write_driver(ctr32);
-        print_bin(ctr32);
-        ctr32 <<= 1;
-        if(ctr32 == 0) {
-            ctr32 = 1;
-            ctr8 <<= 1;
-            if(ctr8 == 0x08) ctr8= 1;
-            cube_set_z(ctr8);
-        }
-        delay(500);
-    }
-    
+    // cube_set_z(0x01);
+    // cube_output_enable(0xff);
+    // while(1) {
+    //     cube_write_driver(ctr32);
+    //     print_bin(ctr32);
+    //     ctr32 <<= 1;
+    //     if(ctr32 == 0) {
+    //         ctr32 = 1;
+    //         ctr8 <<= 1;
+    //         if(ctr8 == 0x08) ctr8= 1;
+    //         cube_set_z(ctr8);
+    //     }
+    //     delay(500);
+    // }
+    // ctr32 = 0x00000001;
+    // while(1) {
+    //     cube_output_on();
+    //     cube_set_z(1);
+
+    //     iprintf("data=\r\n");
+    //     print_bin(ctr32); 
+    //     iprintf("\r\n");
+    //     iprintf("latch on..\r\n");
+    //     cube_latch_on();
+    //     delay(1000);
+    //     iprintf("send 1..\r\n");
+    //     spi_send((ctr32 & 0xff000000) >> 24);
+    //     delay(1000);
+    //     iprintf("send 2..\r\n");
+    //     spi_send((ctr32 & 0x00ff0000) >> 16);
+    //     delay(1000);
+    //     iprintf("send 3..\r\n");
+    //     spi_send((ctr32 & 0x0000ff00) >> 8);
+    //     delay(1000);
+    //     iprintf("send 4..\r\n");
+    //     spi_send((ctr32 & 0x000000ff) >> 0);
+    //     delay(1000);
+    //     iprintf("latch off..\r\n\r\n");
+    //     cube_latch_off();
+    //     delay(3000);
+
+    //     ctr32<<=1;
+
+    // }
+
+
+
     iprintf("cube_run ");
-    while(1) {
-        cube_run();
-    }
+    cube_output_on();
+    // while(1) {
+    //     cube_run();
+    // }
 
     iprintf("ledcube> ");
     for(;;) {
-
-        i = getchar();
+        cube_run();
+        // i = getchar();
+        uart_getch(&i);
         if(i == 13) {
             iprintf("\r\n");
             parseLine();
             iprintf("ledcube> ");
-        } else {
+        } else if(i != 0){
             linebuf[linebufptr++] = i;
             putchar(i);
         }
-        cube_dbg();
+       // cube_dbg();
     }
 }
 
@@ -130,7 +164,7 @@ void parseLine() {
     if(strcmp(splt[0], "spi") == 0) {
         num = atoi(splt[1]);
         iprintf("spi: %d\r\n\r\n", num);
-        cube_spi_write(num);
+        cube_write_driver(num);
     }
 
     if(strcmp(splt[0], "z") == 0) {
@@ -138,6 +172,23 @@ void parseLine() {
         iprintf("z: %d\r\n\r\n", num);
         cube_set_z(1<<num);
     }
+
+    if(strcmp(splt[0], "on") == 0) {
+        num = atoi(splt[1]);
+        iprintf("Output ON\r\n\r\n", num); cube_output_on();
+    }
+
+    if(strcmp(splt[0], "off") == 0) {
+        num = atoi(splt[1]);
+        iprintf("Output OFF\r\n\r\n", num); cube_output_off();
+    }
+
+    if(strcmp(splt[0], "set") == 0) {
+        num = atoi(splt[1]);
+        cube_set_single_frame_led(atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]));
+        iprintf("Set l=%d n=%d r=%d g=%d b=%d\r\n\r\n", atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]));
+    }
+    
 
     linebufptr = 0;
     for(; i < 100; i++)

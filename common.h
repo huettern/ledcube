@@ -17,6 +17,7 @@ int uart_write(char *p, int len);
 int uart_write_err(char *p, int len);
 int uart_read(char *p, int len);
 void uart_init(int baud_rate);
+void uart_getch(char *p);
 
 // From delay.c
 void delay(unsigned int ms);
