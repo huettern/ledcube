@@ -45,7 +45,7 @@ static const uint16_t pwm_ctr_mod = 255;
 static volatile uint8_t z_ctr = 0;
 static const uint8_t z_ctr_mod = 3;
 static volatile uint32_t frame_ctr = 0;
-static const uint32_t frame_ctr_mod = 1; // number of frames
+static const uint32_t frame_ctr_mod = 8; // number of frames
 
 static volatile uint32_t driv_buf = 0; // spi driver buffer holding data for next write
 static uint32_t z_buf;
@@ -54,7 +54,99 @@ static volatile uint8_t int_flag = 1; // set to calculate new frame
 
 static volatile uint8_t change_z = 0;
 
-static tsFrame test_frame;
+//static tsFrame test_frame;
+
+
+static tsFrame test_frame[] = {
+    	{
+    	0,255,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,255,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,255,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,255,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,0,200,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,0,200,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,0,200,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    	{
+    	0,0,200,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 0
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0, //layer 1
+    	0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0,
+    	 0,0,0,0,0,0,0,0,0 //layer 2
+    	},
+    };
 
 //==============================================================
 // prototypes
@@ -66,6 +158,7 @@ void init_clk();
 // functions
 //==============================================================
 void cube_init () {
+	tsFrame f;
 	int i,j,k;
     iprintf("cube_init\r\n");
     RGB_LED(100,0,0);
@@ -81,19 +174,21 @@ void cube_init () {
     RGB_LED(0,100,0);
     init_clk();
 
-    memset(&test_frame, 0, sizeof(test_frame));
-    // init test frame
-    test_frame.layer[0].color[0].r = 0xff;
-    test_frame.layer[0].color[0].g = 0;
-    test_frame.layer[0].color[0].b = 0;
+    // memset(&test_frame, 0, sizeof(test_frame));
+    // // init test frame
+    // test_frame.layer[0].color[0].r = 0xff;
+    // test_frame.layer[0].color[0].g = 0;
+    // test_frame.layer[0].color[0].b = 0;
 
-    test_frame.layer[1].color[0].r = 0;
-    test_frame.layer[1].color[0].g = 0;
-    test_frame.layer[1].color[0].b = 0;
+    // test_frame.layer[1].color[0].r = 0;
+    // test_frame.layer[1].color[0].g = 0;
+    // test_frame.layer[1].color[0].b = 0;
 
-    test_frame.layer[2].color[0].r = 0;
-    test_frame.layer[2].color[0].g = 0;
-    test_frame.layer[2].color[0].b = 0xff;
+    // test_frame.layer[2].color[0].r = 0;
+    // test_frame.layer[2].color[0].g = 0;
+    // test_frame.layer[2].color[0].b = 0xff;
+
+    // test_frame = f;
 
     // for(i=0;i<3;i++) {
     // 	for(j=0;j<9;j++) {
@@ -187,7 +282,7 @@ void init_clk() {
  //    TPM1_MOD  = 2614; // input: 48MHz -> tick at 18.362kHz
 	// TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(0); // start timer
 
-    TPM1_MOD  = 1600; // input: 48MHz -> tick at 18.362kHz
+    TPM1_MOD  = 1300; // input: 48MHz -> tick at 18.362kHz
 	TPM1_SC   = TPM_SC_CMOD(1) | TPM_SC_PS(0); // start timer
 
  //    TPM1_MOD  = 0xffff; // input: 48MHz -> tick at 18.362kHz
@@ -221,7 +316,7 @@ void cube_run() {
 		// for every led
 		for(led_ctr = 0; led_ctr < 9; led_ctr++) {
 			// get led color
-			clr = &test_frame.layer[z_ctr].color[led_ctr];
+			clr = &test_frame[frame_ctr].layer[z_ctr].color[led_ctr];
 			led = 0;
 			// red
 			if(pwm_ctr < clr->r) led |= (1<<0);
@@ -246,7 +341,7 @@ void cube_run() {
 void FTM1_IRQHandler() {
 	// TPM1_SC |= TPM_SC_TOF_MASK;
 	// return;
-	if(int_flag) RGB_LED(100,0,0);
+	//if(int_flag) RGB_LED(100,0,0);
 	if(TPM1_SC & TPM_SC_TOIE_MASK) {
 		// tickctr++;
 		// if(tickctr < 20) return;
@@ -379,8 +474,8 @@ inline void cube_output_off() {
 }
 
 
-void cube_set_single_frame_led(uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
-	test_frame.layer[layer].color[led].r=r;
-	test_frame.layer[layer].color[led].g=g;
-	test_frame.layer[layer].color[led].b=b;
+void cube_set_single_frame_led(uint32_t frame, uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
+	test_frame[frame].layer[layer].color[led].r=r;
+	test_frame[frame].layer[layer].color[led].g=g;
+	test_frame[frame].layer[layer].color[led].b=b;
 }

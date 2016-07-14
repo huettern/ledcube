@@ -17,7 +17,7 @@ inline void cube_latch_off();
 inline void cube_output_on();
 inline void cube_output_off();
 
-void cube_set_single_frame_led(uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b);
+void cube_set_single_frame_led(uint32_t frame, uint8_t layer, uint8_t led, uint8_t r, uint8_t g, uint8_t b);
 
 void cube_run();
 

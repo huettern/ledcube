@@ -13,6 +13,7 @@
 #include "common.h"
 
 #include "ledcube.h"
+#include "render.h"
 
 extern char *_sbrk(int len);
 
@@ -64,6 +65,8 @@ int main(void)
 
     // init led cube
     cube_init();
+    iprintf("render_init");
+    render_init();
 
     // test cube
     //cube_test();
@@ -129,9 +132,9 @@ int main(void)
 
     iprintf("cube_run ");
     cube_output_on();
-    // while(1) {
-    //     cube_run();
-    // }
+    while(1) {
+        cube_run();
+    }
 
     iprintf("ledcube> ");
     for(;;) {
@@ -185,8 +188,8 @@ void parseLine() {
 
     if(strcmp(splt[0], "set") == 0) {
         num = atoi(splt[1]);
-        cube_set_single_frame_led(atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]));
-        iprintf("Set l=%d n=%d r=%d g=%d b=%d\r\n\r\n", atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]));
+        cube_set_single_frame_led(atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]),atoi(splt[6]));
+        // iprintf("Set l=%d n=%d r=%d g=%d b=%d\r\n\r\n", atoi(splt[1]),atoi(splt[2]),atoi(splt[3]),atoi(splt[4]),atoi(splt[5]));
     }
     
 
@@ -346,9 +349,6 @@ void TSI0_IRQHandler() {
 }
 void MCG_IRQHandler() {
     iprintf(" MCG_IRQHandler\r\n");
-}
-void LPTimer_IRQHandler() {
-    iprintf(" LPTimer_IRQHandler\r\n");
 }
 void PORTA_IRQHandler() {
     iprintf(" PORTA_IRQHandler\r\n");

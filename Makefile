@@ -23,7 +23,7 @@ CFLAGS = -ffunction-sections -fdata-sections -Wall -Wa,-adhlns="$@.lst" \
 
 LIBOBJS = _startup.o syscalls.o uart.o delay.o ring.o tests.o spi.o
 
-INCLUDES = freedom.h common.h ledcube.h spi.h
+INCLUDES = freedom.h common.h render.h ledcube.h spi.h
 
 .PHONY:	clean gcc-arm deploy
 
@@ -46,8 +46,8 @@ clean:
 %.srec: %.out
 	$(OBJCOPY) -O srec $< $@
 
-%.out: %.o ledcube.o mkl25z4.ld libbare.a
-	$(CC) $(CFLAGS) -T mkl25z4.ld -o $@ $< ledcube.o libbare.a
+%.out: %.o ledcube.o render.o mkl25z4.ld libbare.a
+	$(CC) $(CFLAGS) -T mkl25z4.ld -o $@ $< ledcube.o render.o libbare.a
 
 # -----------------------------------------------------------------------------
 # Burn/deploy by copying to the development board filesystem
@@ -57,7 +57,7 @@ DEPLOY_VOLUME = /media/sf_FRDM-KL25Z
 
 deploy: main.srec
 	cp $< /media/sf_noah/Desktop/$<
-	#cp $< /media/noah/FRDM-KL25Z/$<
+	cp $< /media/noah/FRDM-KL25Z/$<
 	#dd conv=fsync bs=64k if=$< of=$(DEPLOY_VOLUME)/$<
 	
 # -----------------------------------------------------------------------------
